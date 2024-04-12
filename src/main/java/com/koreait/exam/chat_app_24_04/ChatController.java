@@ -1,5 +1,7 @@
 package com.koreait.exam.chat_app_24_04;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,11 @@ public class ChatController {
 
   }
 
+  @GetMapping("/room")
+  public String showRoom() {
+    return "chat/room";
+  }
+
   @PostMapping("/writeMessage")
   @ResponseBody
   public RsData<writeMessageResponse> writeMessage(@RequestBody writeMessageRequest req) {
@@ -29,8 +36,7 @@ public class ChatController {
     return new RsData<>(
         "S-1",
         "메세지가 작성됨",
-        new writeMessageResponse(message.getId()
-        )
+        new writeMessageResponse(message.getId())
     );
   }
 
@@ -51,7 +57,7 @@ public class ChatController {
 
     // 번호가 입력 되었다면
     if (req.fromId != null) {
-      // 해당 번호의 채팅 메세지가 전체 리스트의 몇번째 인덱스인지? 없다면 -1
+      // 해당 번호의 채팅 메세지가 전체 리스트의 몇번째 인덱스인지? 없다면
       int index = IntStream.range(0, messages.size())
           .filter(i -> chatMessages.get(i).getId() == req.fromId)
           .findFirst()
@@ -62,6 +68,7 @@ public class ChatController {
         messages = messages.subList(index + 1, messages.size());
       }
     }
+
 
     return new RsData<>(
         "S-1",
